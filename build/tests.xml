@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     3 juil. 2012 10:54:33                                                        
+
+     AWD Tools tests
+     description
+                   
+     lepersp                                                                
+     ====================================================================== -->
+<project name="VrAssembler tests" default="test1" basedir="../">
+
+	<description>
+            description
+    </description>
+
+
+	<!-- ================================= 
+          target: merge_geoms test              
+         ================================= -->
+	<target name="test1" depends="init" description="description">
+
+		<exec executable="${vrassembler}" dir="${basedir}/tests">
+			<arg line="-dir dirA -o dirA.vra" />
+		</exec>
+		
+	</target>
+	
+
+
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+
+		<condition property="vrassembler"
+		           value="${basedir}/bin/osx/vrassembler">
+			<os family="mac" />
+		</condition>
+		<condition property="vrassembler"
+		           value="${basedir}/bin/win/vrassembler.exe">
+			<os family="windows" />
+		</condition>
+
+		
+
+	</target>
+
+</project>

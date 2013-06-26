@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     15. jun 2012 21:16:20                                                        
+
+     AWD Tools  
+     description
+                   
+     Pierre Lepers                                                             
+     ====================================================================== -->
+<project name="VrAssembler" default="main" basedir="../">
+
+	<description>
+            build VrAssembler tools
+    </description>
+
+	<property name="FMK_HOME" location="${basedir}" />
+	<loadproperties srcfile="${basedir}/build/build.properties" />
+
+
+
+	<!-- ================================= 
+          target: main              
+         ================================= -->
+	<target name="main" depends="init" description="description">
+		<antcall target="compile vrassembler">
+		</antcall>
+		<antcall target="create vrassembler excutables">
+		</antcall>
+
+	</target>
+
+	<!-- ================================= 
+          target: compile vrassembler              
+         ================================= -->
+	<target name="compile vrassembler"
+	        depends="init"
+	        description="description">
+
+		<java jar="${redtamarin.asc}" fork="true">
+			<arg line="-import ${redtamarin.libs.builtin}" />
+			<arg line="-import ${redtamarin.libs.toplevel}" />
+			<arg line="-d" />
+			<arg line="-strict" />
+			<arg line="${basedir}/src/VrAssembler.as" />
+		</java>
+
+		<move file="${basedir}/src/VrAssembler.abc"
+		      tofile="${basedir}/libs/vrassembler.abc" />
+
+	</target>
+
+	<!-- ================================= 
+          target: create vrassembler excutables
+         ================================= -->
+	<target name="create vrassembler excutables"
+	        depends="init"
+	        description="description">
+
+		<delete>
+			<fileset dir="${basedir}/bin/">
+				<include name="**/vrassembler*" />
+			</fileset>
+		</delete>
+		
+		<mkdir dir="${basedir}/bin/win"/>
+		<mkdir dir="${basedir}/bin/osx"/>
+		<mkdir dir="${basedir}/bin/nix"/>
+
+		<exec executable="${redtamarin.createprojector}" dir="${basedir}">
+			<arg line="-exe ${redtamarin.win.avmplus_d}" />
+			<arg line="-o ${basedir}/bin/win/vrassembler.exe" />
+			<arg line="${basedir}/libs/vrassembler.abc" />
+		</exec>
+		<exec executable="${redtamarin.createprojector}" dir="${basedir}">
+			<arg line="-exe ${redtamarin.osx.avmplus}" />
+			<arg line="-o ${basedir}/bin/osx/vrassembler" />
+			<arg line="${basedir}/libs/vrassembler.abc" />
+		</exec>
+		<exec executable="${redtamarin.createprojector}" dir="${basedir}">
+			<arg line="-exe ${redtamarin.nix.avmplus}" />
+			<arg line="-o ${basedir}/bin/nix/vrassembler" />
+			<arg line="${basedir}/libs/vrassembler.abc" />
+		</exec>
+
+
+
+	</target>
+
+
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: init                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="init">
+
+
+	</target>
+
+</project>
